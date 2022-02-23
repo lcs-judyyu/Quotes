@@ -21,18 +21,18 @@ struct ContentView: View {
     var body: some View {
         VStack(spacing: 20) {
             
-            VStack {
+            VStack(spacing: 30) {
                 Text(currentQuote.quoteText)
-                    .multilineTextAlignment(.leading)
+                    .multilineTextAlignment(.center)
                     .font(.title2)
                 HStack {
                     Spacer()
-                    Text(currentQuote.quoteAuthor)
+                    Text("- " + currentQuote.quoteAuthor)
                         .multilineTextAlignment(.trailing)
                         .font(.title3)
                 }
             }
-                .padding(30)
+                .padding(25)
                 .border(Color.black, width: 5)
             
             Image(systemName: "heart.circle")
@@ -49,6 +49,7 @@ struct ContentView: View {
             
             HStack {
                 Text("Favourites")
+                    .bold()
                 Spacer()
             }
             
