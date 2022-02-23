@@ -8,11 +8,30 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    //MARK: Stored Properties
+    @State var currentQuote: Quote = Quote(quoteText: "The greatest danger for most of us is not that our aim is too high and we miss it, but that it is too low and we reach it.",
+                                           quoteAuthor: "Michelangelo",
+                                           senderName: "",
+                                           senderLink: "",
+                                           quoteLink: "http://forismatic.com/en/1f8428d277/")
+
+    //MARK: Computed Properties
+    
     var body: some View {
         VStack(spacing: 20) {
-            Text("Lorem Ipsum")
-                .multilineTextAlignment(.leading)
-                .font(.title2)
+            
+            VStack {
+                Text(currentQuote.quoteText)
+                    .multilineTextAlignment(.leading)
+                    .font(.title2)
+                HStack {
+                    Spacer()
+                    Text(currentQuote.quoteAuthor)
+                        .multilineTextAlignment(.trailing)
+                        .font(.title3)
+                }
+            }
                 .padding(30)
                 .border(Color.black, width: 5)
             
@@ -42,11 +61,14 @@ struct ContentView: View {
             
         }
         .navigationTitle("Quotes")
+        .padding()
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        NavigationView {
+            ContentView()
+        }
     }
 }
