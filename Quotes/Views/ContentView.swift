@@ -11,10 +11,7 @@ struct ContentView: View {
     
     //MARK: Stored Properties
     @State var currentQuote: Quote = Quote(quoteText: "The greatest danger for most of us is not that our aim is too high and we miss it, but that it is too low and we reach it.",
-                                           quoteAuthor: "Michelangelo",
-                                           senderName: "",
-                                           senderLink: "",
-                                           quoteLink: "http://forismatic.com/en/1f8428d277/")
+                                           quoteAuthor: "Michelangelo")
 
     //MARK: Computed Properties
     
