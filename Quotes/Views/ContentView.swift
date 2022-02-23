@@ -60,6 +60,24 @@ struct ContentView: View {
             Spacer()
             
         }
+        .task {
+            let url = URL(string: "https://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=json&lang=en")!
+            var request = URLRequest(url: url)
+          
+            request.setValue("application/json",
+                             forHTTPHeaderField: "Accept")
+            let urlSession = URLSession.shared
+            
+            do {
+                let (data, _) = try await urlSession.data(for: request)
+                            
+                currentQuote = try JSONDecoder().decode(Quote.self, from: data)
+                
+            } catch {
+                print("Could not retrieve or decode the JSON from endpoint.")
+                print(error)
+            }
+        }
         .navigationTitle("Quotes")
         .padding()
     }
