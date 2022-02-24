@@ -41,10 +41,15 @@ struct ContentView: View {
                 .frame(width: 40, height: 40)
                 .foregroundColor(currentQuoteAddedToFavourites == true ? .red : .secondary)
                 .onTapGesture {
+                    currentQuoteAddedToFavourites.toggle()
                     if currentQuoteAddedToFavourites == false {
                         favourites.append(currentQuote)
                         
                         currentQuoteAddedToFavourites = true
+                    } else {
+                        favourites.removeLast()
+                        
+                        currentQuoteAddedToFavourites = false
                     }
                 }
             
