@@ -12,7 +12,11 @@ struct ContentView: View {
     //MARK: Stored Properties
     @State var currentQuote: Quote = Quote(quoteText: "The greatest danger for most of us is not that our aim is too high and we miss it, but that it is too low and we reach it.",
                                            quoteAuthor: "Michelangelo")
+    
+    @State var favourites: [Quote] = []
 
+    @State var currentQuoteAddedToFavourites: Bool = false
+    
     //MARK: Computed Properties
     
     var body: some View {
@@ -38,7 +42,9 @@ struct ContentView: View {
                 .foregroundColor(Color.gray)
             
             Button(action: {
-                
+                Task {
+                   await loadNewQuotes()
+                }
             }, label: {
                 Text("Another one!")
             })
@@ -59,27 +65,33 @@ struct ContentView: View {
             
         }
         .task {
-            let url = URL(string: "https://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=json&lang=en")!
-            var request = URLRequest(url: url)
-          
-            request.setValue("application/json",
-                             forHTTPHeaderField: "Accept")
-            let urlSession = URLSession.shared
-            
-            do {
-                let (data, _) = try await urlSession.data(for: request)
-                            
-                currentQuote = try JSONDecoder().decode(Quote.self, from: data)
-                
-            } catch {
-                print("Could not retrieve or decode the JSON from endpoint.")
-                print(error)
-            }
+          await loadNewQuotes()
         }
         .navigationTitle("Quotes")
         .padding()
     }
+    //MARK: Functions
+    func loadNewQuotes() async {
+        let url = URL(string: "https://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=json&lang=en")!
+        var request = URLRequest(url: url)
+      
+        request.setValue("application/json",
+                         forHTTPHeaderField: "Accept")
+        let urlSession = URLSession.shared
+        
+        do {
+            let (data, _) = try await urlSession.data(for: request)
+                        
+            currentQuote = try JSONDecoder().decode(Quote.self, from: data)
+            
+        } catch {
+            print("Could not retrieve or decode the JSON from endpoint.")
+            print(error)
+        }
+    }
+    
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
