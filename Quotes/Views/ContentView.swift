@@ -17,6 +17,8 @@ struct ContentView: View {
 
     @State var currentQuoteAddedToFavourites: Bool = false
     
+    @State var repeatedFavourite: Bool = false
+    
     //MARK: Computed Properties
     
     var body: some View {
@@ -24,6 +26,7 @@ struct ContentView: View {
             
             VStack(spacing: 30) {
                 Text(currentQuote.quoteText)
+                    .minimumScaleFactor(0.5)
                     .multilineTextAlignment(.center)
                     .font(.title2)
                 HStack {
@@ -41,22 +44,30 @@ struct ContentView: View {
                 .frame(width: 40, height: 40)
                 .foregroundColor(currentQuoteAddedToFavourites == true ? .red : .secondary)
                 .onTapGesture {
-                    currentQuoteAddedToFavourites.toggle()
                     if currentQuoteAddedToFavourites == false {
-                        favourites.append(currentQuote)
-                        
-                        currentQuoteAddedToFavourites = true
+                        if favourites.contains(currentQuote) {
+                            repeatedFavourite = true
+                            currentQuoteAddedToFavourites = false
+                        } else {
+                            favourites.append(currentQuote)
+                            currentQuoteAddedToFavourites = true
+                        }
+
                     } else {
                         favourites.removeLast()
-                        
                         currentQuoteAddedToFavourites = false
                     }
                 }
+            
+            Text("You have added this quote to favourites.")
+                .font(.body)
+                .opacity(repeatedFavourite ? 1.0 : 0.0)
             
             Button(action: {
                 Task {
                    await loadNewQuotes()
                 }
+                currentQuoteAddedToFavourites = false
             }, label: {
                 Text("Another one!")
             })
