@@ -39,7 +39,14 @@ struct ContentView: View {
             Image(systemName: "heart.circle")
                 .resizable()
                 .frame(width: 40, height: 40)
-                .foregroundColor(Color.gray)
+                .foregroundColor(currentQuoteAddedToFavourites == true ? .red : .secondary)
+                .onTapGesture {
+                    if currentQuoteAddedToFavourites == false {
+                        favourites.append(currentQuote)
+                        
+                        currentQuoteAddedToFavourites = true
+                    }
+                }
             
             Button(action: {
                 Task {
@@ -56,9 +63,8 @@ struct ContentView: View {
                 Spacer()
             }
             
-            List {
-                Text("Nothing is a waste of time if you use the experience wisely.")
-                Text("If your actions inpire others to dream more, learn more, so more and become more, you are a leader.")
+            List (favourites, id: \.self){ currentFavourite in
+                Text(currentFavourite.quoteText)
             }
             
             Spacer()
