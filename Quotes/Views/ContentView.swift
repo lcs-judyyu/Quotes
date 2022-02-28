@@ -10,11 +10,13 @@ import SwiftUI
 struct ContentView: View {
     
     //MARK: Stored Properties
+    @Environment(\.scenePhase) var scenePhase
+    
     @State var currentQuote: Quote = Quote(quoteText: "The greatest danger for most of us is not that our aim is too high and we miss it, but that it is too low and we reach it.",
                                            quoteAuthor: "Michelangelo")
     
     @State var favourites: [Quote] = []
-
+    
     @State var currentQuoteAddedToFavourites: Bool = false
     
     @State var repeatedFavourite: Bool = false
@@ -36,8 +38,8 @@ struct ContentView: View {
                         .font(.title3)
                 }
             }
-                .padding(25)
-                .border(Color.black, width: 5)
+            .padding(25)
+            .border(Color.black, width: 5)
             
             Image(systemName: "heart.circle")
                 .resizable()
@@ -52,7 +54,7 @@ struct ContentView: View {
                             favourites.append(currentQuote)
                             currentQuoteAddedToFavourites = true
                         }
-
+                        
                     } else {
                         favourites.removeLast()
                         currentQuoteAddedToFavourites = false
@@ -65,7 +67,7 @@ struct ContentView: View {
             
             Button(action: {
                 Task {
-                   await loadNewQuotes()
+                    await loadNewQuotes()
                 }
                 currentQuoteAddedToFavourites = false
             }, label: {
@@ -87,7 +89,21 @@ struct ContentView: View {
             
         }
         .task {
-          await loadNewQuotes()
+            await loadNewQuotes()
+            
+            loadFavourites()
+        }
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .inactive {
+                print("Inactive")
+            } else if newPhase == .active{
+                print("Active")
+            } else {
+                print("Background")
+                
+                //permanently save the favourite list
+                persistFavourites()
+            }
         }
         .navigationTitle("Quotes")
         .padding()
@@ -96,19 +112,72 @@ struct ContentView: View {
     func loadNewQuotes() async {
         let url = URL(string: "https://api.forismatic.com/api/1.0/?method=getQuote&key=457653&format=json&lang=en")!
         var request = URLRequest(url: url)
-      
+        
         request.setValue("application/json",
                          forHTTPHeaderField: "Accept")
         let urlSession = URLSession.shared
         
         do {
             let (data, _) = try await urlSession.data(for: request)
-                        
+            
             currentQuote = try JSONDecoder().decode(Quote.self, from: data)
             
         } catch {
             print("Could not retrieve or decode the JSON from endpoint.")
             print(error)
+        }
+    }
+    
+    func persistFavourites() {
+        //get a location to save data
+        let filename = getDocumentsDirectory().appendingPathComponent(savedFavouritesLabel)
+        print(filename)
+        
+        //try to encodr data to JSON
+        do {
+            let encoder = JSONEncoder()
+            
+            //configure the encoder to "pretty print" the JSON
+            encoder.outputFormatting = .prettyPrinted
+            
+            //Encode the list of favourites
+            let data = try encoder.encode(favourites)
+            
+            //write JSON to a file in the filename location
+            try data.write(to: filename, options: [.atomicWrite, .completeFileProtection])
+            
+            //see the data
+            print("Save data to the document directory successfully.")
+            print("=========")
+            print(String(data: data, encoding: .utf8)!)
+            
+        } catch {
+            print("Unable to write list of favourites to the document directory")
+            print("=========")
+            print(error.localizedDescription)
+        }
+    }
+    
+    func loadFavourites() {
+        let filename = getDocumentsDirectory().appendingPathComponent(savedFavouritesLabel)
+        print(filename)
+        
+        do {
+            //load raw data
+            let data = try Data(contentsOf: filename)
+            
+            print("Save data to the document directory successfully.")
+            print("=========")
+            print(String(data: data, encoding: .utf8)!)
+            
+            //decode JSON into Swift native data structures
+            //NOTE: [] are used since we load into an array
+            favourites = try JSONDecoder().decode([Quote].self, from: data)
+            
+        } catch {
+            print("Could not loas the data from the stored JSON file")
+            print("=========")
+            print(error.localizedDescription)
         }
     }
     

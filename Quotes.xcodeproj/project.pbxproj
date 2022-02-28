@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A5D4BF127CC625A00507AAE /* SharedFunctionsAndConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5D4BF027CC625A00507AAE /* SharedFunctionsAndConstants.swift */; };
 		5A88F0FD27C551C500A9488D /* QuotesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A88F0FC27C551C500A9488D /* QuotesApp.swift */; };
 		5A88F0FF27C551C500A9488D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A88F0FE27C551C500A9488D /* ContentView.swift */; };
 		5A88F10127C551CA00A9488D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A88F10027C551CA00A9488D /* Assets.xcassets */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A5D4BF027CC625A00507AAE /* SharedFunctionsAndConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedFunctionsAndConstants.swift; sourceTree = "<group>"; };
 		5A88F0F927C551C500A9488D /* Quotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Quotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A88F0FC27C551C500A9488D /* QuotesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotesApp.swift; sourceTree = "<group>"; };
 		5A88F0FE27C551C500A9488D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -34,6 +36,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A5D4BF227CC625D00507AAE /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				5A5D4BF027CC625A00507AAE /* SharedFunctionsAndConstants.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		5A88F0F027C551C400A9488D = {
 			isa = PBXGroup;
 			children = (
@@ -53,6 +63,7 @@
 		5A88F0FB27C551C500A9488D /* Quotes */ = {
 			isa = PBXGroup;
 			children = (
+				5A5D4BF227CC625D00507AAE /* Helpers */,
 				5A88F0FC27C551C500A9488D /* QuotesApp.swift */,
 				5A88F10B27C5532300A9488D /* Model */,
 				5A88F10A27C5531D00A9488D /* Views */,
@@ -156,6 +167,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A5D4BF127CC625A00507AAE /* SharedFunctionsAndConstants.swift in Sources */,
 				5A88F0FF27C551C500A9488D /* ContentView.swift in Sources */,
 				5A88F10D27C5533700A9488D /* Quote.swift in Sources */,
 				5A88F0FD27C551C500A9488D /* QuotesApp.swift in Sources */,
